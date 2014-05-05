@@ -1,6 +1,59 @@
 <!--
   This template loads for the 'tab.about' state (app.js)
 -->
+
+    <script>
+
+    openFB.init('646709025382285', 'http://localhost:8000/#/tab/about'); // Defaults to sessionStorage for storing the Facebook token
+
+//  Uncomment the line below to store the Facebook token in localStorage instead of sessionStorage
+//  openFB.init('YOUR_FB_APP_ID', 'http://localhost/openfb/oauthcallback.html', window.localStorage);
+
+    function login() {
+        openFB.login('email',
+                function() {
+                    alert('Facebook login succeeded');
+                },
+                function(error) {
+                    alert('Facebook login failed: ' + error.error_description);
+                });
+    }
+
+    function getInfo() {
+        openFB.api({
+            path: '/me',
+            success: function(data) {
+                console.log(JSON.stringify(data));
+                document.getElementById("userName").innerHTML = data.name;
+            },
+            error: errorHandler});
+    }
+
+    function share() {
+        openFB.api({
+            method: 'POST',
+            path: '/me/feed',
+            params: {
+                message: 'Testing Facebook APIs'
+            },
+            success: function() {
+                alert('the item was posted on Facebook');
+            },
+            error: errorHandler});
+    }
+
+    function revoke() {
+        openFB.revokePermissions(
+                function() {
+                    alert('Permissions revoked');
+                },
+                errorHandler);
+    }
+
+    function errorHandler(error) {
+        alert(error.message);
+    }
+</script>
 <ion-view title="About Ionic">
   <ion-content has-header="true" has-tabs="true" padding="true">
     <img src="img/ionic.png" class="ionic-logo">
@@ -13,21 +66,12 @@
       Questions? Hit up the 
       <a href="http://forum.ionicframework.com/" target="_blank">forum</a>.
     </p>
-    <p>
-      Find a bug? Create an 
-      <a href="https://github.com/driftyco/ionic/issues?state=open" target="_blank">issue</a>.
-    </p>
-    <p>
-      What to help improve Ionic?
-      <a href="http://ionicframework.com/contribute/" target="_blank">Contribute</a>.
-    </p>
-    <p>
-      Stay up-to-date with the Ionic 
-      <a href="http://ionicframework.com/subscribe/" target="_blank">newsletter</a> and 
-      <a href="https://twitter.com/Ionicframework" target="_blank">twitter</a> account.
-    </p>
-    <p>
-      MIT Licensed. Happy coding.
-    </p>
+
+
+    <button class="btn btn-block" onclick="login()">Login with Facebook</button>
+      <hr/>
+
+      <p>Name: <span id="userName"></span></p>
+<button class="btn btn-block" onclick="getInfo()">Get My Info</button>
   </ion-content>
 </ion-view>
