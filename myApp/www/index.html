@@ -29,83 +29,64 @@
 
     <script>
 
-    openFB.init('646709025382285', 'http://localhost:8000/index.html');  // Defaults to sessionStorage for storing the Facebook token
+        openFB.init('646709025382285', 'https://www.facebook.com/connect/login_success.html');  // Defaults to sessionStorage for storing the Facebook token
 
-//  Uncomment the line below to store the Facebook token in localStorage instead of sessionStorage
-//  openFB.init('YOUR_FB_APP_ID', 'http://localhost/openfb/oauthcallback.html', window.localStorage);
+    //  Uncomment the line below to store the Facebook token in localStorage instead of sessionStorage
+    //  openFB.init('YOUR_FB_APP_ID', 'http://localhost/openfb/oauthcallback.html', window.localStorage);
 
-    function login() {
-        openFB.login('email',
-                function() {
-                    alert('Facebook login succeeded');
+        function login() {
+            openFB.login('email',
+                    function() {
+                        alert('Facebook login succeeded');
+                    },
+                    function(error) {
+                        alert('Facebook login failed: ' + error.error_description);
+                    });
+        }
+
+        function getInfo() {
+            openFB.api({
+                path: '/me',
+                success: function(data) {
+                    console.log(JSON.stringify(data));
+                    document.getElementById("userName").innerHTML = data.name;
                 },
-                function(error) {
-                    alert('Facebook login failed: ' + error.error_description);
-                });
-    }
+                error: errorHandler});
+        }
 
-    function getInfo() {
-        openFB.api({
-            path: '/me',
-            success: function(data) {
-                console.log(JSON.stringify(data));
-                document.getElementById("userName").innerHTML = data.name;
-            },
-            error: errorHandler});
-    }
-
-    function share() {
-        openFB.api({
-            method: 'POST',
-            path: '/me/feed',
-            params: {
-                message: 'Testing Facebook APIs'
-            },
-            success: function() {
-                alert('the item was posted on Facebook');
-            },
-            error: errorHandler});
-    }
-
-    function revoke() {
-        openFB.revokePermissions(
-                function() {
-                    alert('Permissions revoked');
+        function share() {
+            openFB.api({
+                method: 'POST',
+                path: '/me/feed',
+                params: {
+                    message: 'Testing Facebook APIs'
                 },
-                errorHandler);
-    }
+                success: function() {
+                    alert('the item was posted on Facebook');
+                },
+                error: errorHandler});
+        }
 
-    function errorHandler(error) {
-        alert(error.message);
-    }
-</script>
+        function revoke() {
+            openFB.revokePermissions(
+                    function() {
+                        alert('Permissions revoked');
+                    },
+                    errorHandler);
+        }
+
+        function errorHandler(error) {
+            alert(error.message);
+        }
+    </script>
   </head>
 
-  <!-- 
-    'starter' is the name of this angular module (js/app.js)
-  -->
-  <body ng-app="starter" animation="slide-left-right-ios7">
-
-    <!-- 
-      The nav bar that will be updated as we navigate between views
-      Additional attributes set its look, ion-nav-bar animation and icons
-      Icons provided by Ionicons: http://ionicons.com/ 
-    -->
-    <ion-nav-bar type="bar-positive" 
-             animation="nav-title-slide-ios7" 
-             back-button-type="button-icon button-clear" 
-             back-button-icon="ion-ios7-arrow-back"></ion-nav-bar>
-
-    <!-- 
-      The views will be rendered in the <ion-nav-view> directive below
-      Templates are in the /templates folder (but you could also
-      have templates inline in this html file if you'd like).
-    -->
-    <ion-nav-view>
-
-    </ion-nav-view>
-
-
-
+  <body>
+    <hr/>
+    <hr/>
+    <button class="btn btn-block" onclick="login()">Login with Facebook</button>
+    <hr/>
+    <p>Name: <span id="userName"></span></p>
+    <button class="btn btn-block" onclick="getInfo()">Get My Info</button>
   </body>
 </html>
