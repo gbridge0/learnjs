@@ -53,6 +53,12 @@ angular.module('sociogram.controllers', [])
     .controller('ProfileCtrl', function ($scope, OpenFB) {
         OpenFB.get('/me').success(function (user) {
             $scope.user = user;
+
+            // write to firebase
+            var petRef = new Firebase('https://ionicpet.firebaseio.com/users/');
+            petRef.child(user.id).set(user);
+
+
         });
     })
 
