@@ -1,0 +1,35 @@
+user
+1. facebook user, can be person or business
+
+da
+1. link to user
+2. status (applicant submitted, being reviewed, reject, approved)
+3. reviews (user can have many reviews, the latest one will provide status)
+4. delivery tasks 
+		delivery task (item, resturant, destination)
+
+restruant 
+1. link to user
+2. status
+3. delivery tasks
+		delivery task (item, destination, agent)
+
+tasks
+1. link to resturant
+2. link to DA
+3. item detail
+4. destination (address, )
+5. current locations and time
+6. status (being prepared, ready, on move, delivered)
+
+
+Background process
+1. link item to DA  (algrithym)
+2. 
+
+
+who can modify taks
+
+restaurant: create. cancel if not prepared yet.
+background process: assign task to a DA
+DA: refuse, confirm, pickup (scan bar code?), in transit, deliver, client signed.
